@@ -1,0 +1,90 @@
+1. 
+
+문제) 전체 회원 현황판 : 개별 회원 이메일/연락처  폼점검 실패시 
+=> 기존(원래) 데이터 갱신 필요
+
+예상 조치사항)
+1) 기존 값 => 변수 저장
+2) 폼점검 메시징 후 복원
+
+기존 조치) 미조치 내지는 location.reload(); (전체 화면 refresh) 
+개선 사항-1)  
+
+// 기존 연락처 저장 변수(임시) : 2022.5.4
+var default_phone;
+
+연락처 입력시에 보관해 두었다가 수정/폼점검 실패시 복원(초기화)
+
+ex)
+console.log("폼점검 실패");
+
+...(중략)...
+						
+	alert("연락처 폼점검 실패");
+	
+	// 원래 연락처로 복구(초기화) : 2022.5.4
+	phoneUpdate.value = default_phone;
+	console.log("기존 연락처 : " + default_phone);
+} //
+
+개선 사항-2) 개선 사항-1을 재개선
+
+-- 기존 회원 정보에서 "필드별" JS 배열 추출
+
+    // java List => javascript Array
+	// 기존 이메일/연락처/주소정보(우편번호, 기본주소, 상세주소) => JS 배열 (ex. 최대 10개)
+	// ex) 이메일들 배열
+	function getDefaultMemberFldsFromMembers(fld) {
+		
+		var i = 0;
+		var arr = new Array(); // javascript 배열
+		
+		<%
+		    List<MemberRoleVO> memberList2 = (List<MemberRoleVO>)request.getAttribute("members");
+		
+			for (int i=0; i<memberList2.size(); i++) {
+				
+				MemberRoleVO roleVO = memberList.get(i);
+		%>
+		 		// javascript 배열에 요소 추가
+		 		
+				if (fld == '이메일') {
+					arr.push("<%=roleVO.getEmail() %>");
+				} else if (fld == '연락처') {
+					arr.push("<%=roleVO.getPhone() %>");
+				} else if (fld == '우편번호') {
+					arr.push("<%=roleVO.getZipNum() %>");
+				} else if (fld == '기본주소') {
+					arr.push("<%=roleVO.getAddress1() %>");
+				} else if (fld == '상세주소') {
+					arr.push("<%=roleVO.getAddress2() %>");
+				}
+		<%
+			}
+		%>
+		
+		// java List => javascript Array 변환 완료
+		console.log("arr : " + arr);
+		
+		return arr;
+	}
+	
+
+-- 개별 정보 저장하는 히든 필드 활용
+	
+// <!-- 한줄 시작 -->
+<div style="width:3350px;height:70px;">
+
+	<%-- <div id="count_${member.id}" style="width:0">${st.index}</div> --%>
+	<input type="hidden" id="count_${member.id}" value="${st.index}" />	
+
+
+ 2. 
+ 
+ 문제) 개별 회원 모달 => 기존 정보 포커스 할당 문제 발상
+ 
+ 예상 조치 사항)
+ 모달창 => z-index 변경, 좌표 성분 이동(viewport 밖으로 임시 이동) => 사용시에는 복구
+  
+ 
+   

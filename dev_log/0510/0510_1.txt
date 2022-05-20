@@ -1,0 +1,4 @@
+1. image file upload
+
+-- thumbnail : 190 * 200 px
+

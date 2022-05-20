@@ -1,0 +1,41 @@
+1. 개별 회원정보/롤(Role) 비활성화(삭제) DAO/Service 메서드 교정 : 리턴값 활성화(boolean)
+: 존재하지 않는 회원에 대한 삭제 메시지 없음
+
+before)
+
+/**
+ * 회원 탈퇴 처리 : 회원 활성화 필드(useyn) 비활성('n')
+ * 
+ * @param id 회원 아이디
+ */
+public void inactiveMember(String id) {
+
+
+/**
+ * 회원 탈퇴 처리
+ * 
+ * @param id 회원 아이디
+ */
+@Transactional(propagation=Propagation.REQUIRED)
+public boolean inactiveMemberRole(final String id) {
+
+
+after)
+
+/**
+ * 회원 탈퇴 처리 : 회원 활성화 필드(useyn) 비활성('n')
+ * 
+ * @param id 회원 아이디
+ * @return 회원정보 수정 성공 여부
+ */
+public boolean inactiveMember(String id) {
+
+
+/**
+ * 회원 탈퇴 처리
+ * 
+ * @param id 회원 아이디
+ * @return 회원 탈퇴 처리 성공 여부
+ */
+@Transactional(propagation=Propagation.REQUIRED)
+public boolean inactiveMemberRole(final String id) {
