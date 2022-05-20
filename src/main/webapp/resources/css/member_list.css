@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+/* 전체 레이아웃 */
+div#wrap {
+	width:1300px;
+	max-width:none!important; /* bootstrap 반응형 제거 부가 패치 */
+	/* background:yellow; */
+	height:98vh;
+	margin:auto;	
+}
+
+/* 로고 */
+div#logo {
+	width:200px;
+	float:left;
+	/* background-color:#E7B9C0; */
+}
+
+/* 상단부 */
+header {
+	width:100%;
+	height:100px;
+	/* background-color:cyan; */
+}
+
+/* 메뉴 */
+nav ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+	width:1000px;
+	/* background-color:#FFE5D4; */
+}
+
+nav ul li {
+	float:left;
+}
+
+nav ul li a {
+	display:block;
+	padding:35px 50px;
+	text-decoration:none;
+	text-align:center;
+	font-size:1.2em;
+	color:#000;
+	font-weight:bold;
+}
+
+/* 현황 본문 */
+article {
+	width:100%;
+	/* height:calc(97vh - 200px); */ /* 세로로 늘어나도록 교정 */
+	/* background-color:#C8EBFA; */
+}
+
+/* 하단부 */ 
+footer {
+	margin:10px 0 0 0;
+	/* height:60px; */
+	height:80px;
+/* 	background-color:lightgray; */
+	background-image: url('../img/under_logo.gif');
+	background-repeat: no-repeat;
+	background-position: 40px center;
+}
+
+
+footer #copy {
+	margin:20px 0 30px 300px;
+	width:600px;	
+	float:left;	
+	line-height:2em;	
+}
+
+/* 모달 팝업창 : 2022.5.4 초기 상태 개선 */
+#member_modal {
+	position:absolute;
+	left:-500px;
+	top:-450px;
+   /*  opacity:1; */
+    background-color:#fff;
+    font-size:1em;
+    width:500px;
+    color:#333;
+    text-align:center;
+    padding:10px 10px;
+    border:1px solid #EBEEEF;
+    border-radius:0px;       
+    z-index:20;
+}
+
+/* 모달 헤더 */
+#member_modal_header {
+	margin:auto;
+	height:50px;
+	display:flex;
+	align-items:center;
+	background-color:rgba(240,240,240, 0.5);
+	border-radius:0px;  
+}
+
+#member_modal_header_icon {
+	width:50px;
+	float:left;
+	color:#333; 
+	font-size:1em;
+}
+
+#member_modal_header_title {
+ 	width:calc(100% - 100px);
+	float:left;
+	padding-top:0px;
+	height:55%;
+	text-align:left;
+	font-weight:bold;
+}
+
+#member_modal_header_close {
+	width:50px;
+	font-size:1em; 
+	font-weight:bold;
+}
+
+#member_modal_body {
+	text-align:left; 
+	line-height:30pt;
+}
+
+/* member list grid title */
+#member_grid_title div.member_list_grid_title {
+	font-weight:bold;	
+	float:left;
+}

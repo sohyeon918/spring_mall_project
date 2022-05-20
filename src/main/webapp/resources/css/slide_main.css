@@ -1,0 +1,89 @@
+@charset "UTF-8";
+
+body {
+	margin:0;
+}
+
+/* 신상품/베스트 상품 슬라이드 메뉴 */
+div[id$=slide_menu] {
+	position:absolute;
+	/* top:-200px;	 */
+	width:940px;
+	height:100px;
+	z-index:2;
+/*  	background-color:orange;  */
+}
+
+/* 신상품 슬라이드 메뉴 */
+div#new_slide_menu {
+	top:750px;
+}
+
+/* 베스트 상품 슬라이드 메뉴 */
+div#best_slide_menu {
+	top:1120px;
+}
+
+/* 신상품 패널 */
+div#newProduct, div#bestProduct {
+	
+	height:300px;
+/* 	background-color:green; */
+}
+
+/* 슬라이드 왼쪽 메뉴 */
+div[id$=left_btn_pnl] {
+	float:left;
+	width:100px;
+	height:100px;
+	cursor:pointer;
+}
+
+/* 슬라이드 왼쪽/오른쪽 버튼 */
+[id$=left_btn], [id$=right_btn] {
+	color:brown; 
+	opacity:0.7; 
+	font-size:4em;
+}
+
+span[id$=left_btn]:hover, 
+span[id$=right_btn]:hover {
+/* span[id$=_btn]:hover	{ */ 
+	color:brown; 
+	opacity:1;
+	font-size:4em;
+}
+
+/* 슬라이드 가운데 공(blank) 패널 */
+div[id$=blank_panel] {
+	float:left;
+	width:740px;
+	height:100px;
+/* 	background-color:cyan; */
+} 
+
+/* 슬라이드 오른쪽 메뉴 */
+div[id$=right_btn_pnl] {
+	float:left;
+	width:80px;
+	height:100px;
+	cursor:pointer;
+	text-align:right;
+}
+
+/* 슬라이드 이미지들 */
+.slider_image {
+    float:left;
+    top:0px;
+    width:200px;
+    height:150px;
+}
+
+/* 가운데 이미지(초기 이미지 상태) */
+img[id^=s]{
+	position:relative;
+ 	margin:0 5px;
+}
+
+/* 초기 좌표 */
+img[id^=s] { left:0; top:0; }

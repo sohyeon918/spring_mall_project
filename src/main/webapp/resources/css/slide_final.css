@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+body {
+	margin:0;
+}
+
+/* 슬라이드 인트로 패널 */
+div#slide_intro {
+	width:100%;
+	text-align:center;
+  	margin:auto 0;	
+  	display:flex;
+  	align-items:center;
+  	justify-content:center;
+}
+
+/* 슬라이드 패널 */
+#slide_pnl {
+    width:840px;
+    display:flex;
+    flex-direction:row;
+    height:250px;
+    overflow:hidden;
+	background-color:yellow;
+}
+
+/* 슬라이드 메뉴 */
+div#slide_menu {
+	position:absolute;
+	top:50px;	
+	width:840px;
+	height:100px;
+	z-index:2;
+}
+
+/* 슬라이드 왼쪽 메뉴 */
+div#left_btn_pnl {
+	float:left;
+	width:100px;
+	height:100px;
+	cursor:pointer;
+}
+
+/* 슬라이드 왼쪽/오른쪽 버튼 */
+#left_btn, #right_btn {
+	color:white; 
+	opacity:0.7; 
+	font-size:4em;
+}
+
+span#left_btn:hover, span#right_btn:hover {
+/* span[id$=_btn]:hover	{ */ 
+	color:white; 
+	opacity:1;
+	font-size:4em;
+}
+
+/* 슬라이드 가운데 공(blank) 패널 */
+div#blank_panel {
+	float:left;
+	width:640px;
+	height:100px;
+} 
+
+/* 슬라이드 오른쪽 메뉴 */
+div#right_btn_pnl {
+	float:left;
+	width:100px;
+	height:100px;
+	cursor:pointer;
+}
+
+/* 슬라이드 이미지들 */
+.slider_image {
+    float:left;
+    top:0px;
+    width:200px;
+    height:150px;
+}
+
+/* 정가운데 이미지(초기 이미지 상태) */
+img[id^=s]{
+	position:relative;
+ 	margin:0 5px;
+}
+
+/* 초기 좌표 */
+img[id^=s] { left:0; top:0; }

@@ -1,0 +1,120 @@
+@charset "UTF-8";
+
+body {
+	margin:0;
+}
+
+/* 슬라이드 인트로 패널 */
+div#slide_intro {
+	width:100%;
+	text-align:center;
+  	margin:auto 0;	
+  	display:flex;
+  	align-items:center;
+  	justify-content:center;
+	/* background-color:cyan; */
+}
+
+/* 슬라이드 패널 */
+#slide_pnl {
+    /* width:1200px; */
+    width:840px;
+    display:flex;
+    flex-direction:row;
+    /* height:350px; */
+    height:250px;
+    overflow:hidden;
+	background-color:yellow;
+}
+
+/* 슬라이드 메뉴 */
+div#slide_menu {
+	/* position:fixed; */
+	position:absolute;
+	top:50px;	
+	/* width:1200px; */
+	width:840px;
+	height:100px;
+	z-index:2;
+	
+	/* background-color:cyan; */
+}
+
+/* 슬라이드 왼쪽 메뉴 */
+div#left_btn_pnl {
+	float:left;
+	/* width:200px; */
+	width:100px;
+	height:100px;
+	cursor:pointer;
+}
+
+/* 슬라이드 왼쪽/오른쪽 버튼 */
+#left_btn, #right_btn {
+	color:white; 
+	opacity:0.7; 
+	font-size:4em;
+}
+
+span#left_btn:hover, span#right_btn:hover {
+/* span[id$=_btn]:hover	{ */ 
+	color:white; 
+	opacity:1;
+	font-size:4em;
+}
+
+/* 슬라이드 가운데 공(blank) 패널 */
+div#blank_panel {
+	float:left;
+	/* width:800px; */
+	width:640px;
+	height:100px;
+} 
+
+/* 슬라이드 오른쪽 메뉴 */
+div#right_btn_pnl {
+	float:left;
+	/* width:200px; */
+	width:100px;
+	height:100px;
+	cursor:pointer;
+}
+
+/* 슬라이드 이미지들 */
+.slider_image {
+    float:left;
+    top:0px;
+    width:200px;
+    height:150px;
+    
+    /*
+    opacity:0.2;
+    transition-property:all;
+ 	transition-delay:.1s;
+ 	transition-duration:.3s;
+ 	*/
+ 	
+ 	/* 그림자/블러 효과 */
+ 	/* box-shadow: rgba(217,217,217,0.2) 0 50px; */
+ 	/* filter: blur(5px); */
+}
+
+/* 정가운데 이미지(초기 이미지 상태) */
+img[id^=s]{
+	position:relative;
+ 	/* filter: blur(0); */
+ 	margin:0 5px;
+}
+
+/* 초기 좌표 */
+img#s1 { left: 0; top:0; }
+/* img#s2 { left: 0px; top:50px; } */
+img#s2 { left: 0px; top:0px; }
+/* 초기 정가운데 이미지(초기 상태 부각 이미지) */
+/* img#s3  { left: 0px; width:400px; height:250px; top:80px; filter: blur(0); opacity:1.0; } */
+/* img#s3  { left: 0px; width:200px; height:230px; top:80px; filter: blur(0); opacity:1.0; } */
+img#s3  { left: 0px; width:200px; top:0px; filter: blur(0); opacity:1.0; }
+
+/* img#s4 { left: 0px; top:50px; } */
+img#s4 { left: 0px; top:0px; }
+/* img#s5 { left: 0px; top:0; } */
