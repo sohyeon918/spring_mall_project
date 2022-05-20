@@ -1,0 +1,16 @@
+주의) ex) 한글 인자 "화곡동" => %ED%99%94%EA%B3%A1%EB%8F%99
+: 브라우저에 주소를 복사하고 이를 다시 복사해서 에디터에 붙임
+
+1) 우편번호/기본주소/상세주소 수정
+
+curl -v -X GET "http://localhost:8181/project/member/zip_address_update?id=spring1234&zipNum=11111&address1=화곡동&address2=이젠학원"
+
+curl -v -X GET "http://localhost:8181/project/member/zip_address_update?id=spring1234&zipNum=11111&address1=%ED%99%94%EA%B3%A1%EB%8F%99&address2=%EC%9D%B4%EC%A0%A0%ED%95%99%EC%9B%90"
+
+-------------------------------------------------------------------------------------------
+
+1) 상세주소 "만" 수정
+
+curl -v -X GET "http://localhost:8181/project/member/address2_update?id=spring1234&address2=이젠컴퓨터학원 화곡점"
+
+curl -v -X GET "http://localhost:8181/project/member/address2_update?id=spring1234&address2=%EC%9D%B4%EC%A0%A0%EC%BB%B4%ED%93%A8%ED%84%B0%ED%95%99%EC%9B%90%20%ED%99%94%EA%B3%A1%EC%A0%90"

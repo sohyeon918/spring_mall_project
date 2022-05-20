@@ -1,0 +1,5 @@
+-- 개별 회원정보 비활성화(삭제)
+
+curl -v -X GET "http://localhost:8181/project/member/member_inactive_admin?id=abcd1234"
+
+curl -v -X GET "http://localhost:8181/project/member/member_inactive_admin?id=abcdabcdabcd1234"
