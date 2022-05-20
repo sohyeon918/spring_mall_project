@@ -17,3 +17,6 @@
 - 주문
 ![주문](https://user-images.githubusercontent.com/105896884/169461848-e9f0ecd8-4d6a-402c-b39a-716db18bedda.PNG)
 
+![5](https://user-images.githubusercontent.com/105896884/169464088-3df75ed2-4e74-4a36-8b4a-4df01418ad47.PNG)
+![6](https://user-images.githubusercontent.com/105896884/169464311-a666dd5c-623e-4fcd-856f-ca7e2582cffc.PNG)
+![7](https://user-images.githubusercontent.com/105896884/169464166-94658556-0a42-4a66-b1c1-5fe7235a33b7.PNG)
