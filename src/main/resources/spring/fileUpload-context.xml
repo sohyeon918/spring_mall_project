@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Fileupload : 파일 관리자 id(multipartResolver)는 가급적 그대로 사용할 것! -->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		  <property name="maxUploadSize" value="52428800" /> 
+		  <!-- 파일 크기 제한 : 50MB = 50 * 1024 * 1024-->
+		  <!-- <property name="defaultEncoding" value="UTF-8" /> -->
+	  	  <!-- 요청을 처리시 사용할 인코딩 방식. 기본값 ISO-8859-1 -->
+  	</bean>			  
+	
+	<!-- File repository : 파일 저장소 -->
+	<bean id="uploadDirResource" class="org.springframework.core.io.FileSystemResource">
+	    <constructor-arg>
+			<value>E:/lsh/works/project2/upload/</value> 
+	    </constructor-arg>
+	</bean>
+	
+</beans>

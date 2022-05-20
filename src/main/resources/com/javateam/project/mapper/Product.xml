@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javateam.project.mapper.Product">
+
+	<!-- 베스트 상품 조회 -->
+	<select id="listBestProduct" resultType="com.javateam.project.domain.ProductVO">
+		SELECT * FROM best_pro_view
+	</select>
+	
+	<!-- 신상품 조회 -->
+	<select id="listNewProduct" resultType="com.javateam.project.domain.ProductVO">
+		SELECT * FROM new_pro_view
+	</select>
+	
+	<!-- 카테고리(1:Heel) -->
+	<select id="listKindProduct" parameterType="int" 
+		    resultType="com.javateam.project.domain.ProductVO">
+		SELECT * FROM product WHERE kind=#{kind}
+	</select> 
+	
+	<!-- 개별 상품 상세 조회 -->
+	<select id="getProduct" parameterType="int" 
+			resultType="com.javateam.project.domain.ProductVO">
+		SELECT * FROM product WHERE pseq=#{pseq}
+	</select>
+	
+	<!-- 개별 상품 등록 -->
+	<insert id="insertProduct" parameterType="com.javateam.project.domain.ProductVO">
+		INSERT INTO product VALUES (product_seq.nextval, 
+									#{name},
+									#{kind},
+									#{price1},
+									#{price2},
+									#{price3},
+									#{content},
+									#{image},
+									#{thumbImage},
+									#{useyn},
+									#{bestyn},
+									sysdate)
+	</insert>
+	
+	<!-- 최근 등록 상품 아이디 조회 -->
+	<select id="getMaxPseq" resultType="int">
+		SELECT max(pseq) FROM product
+	</select>
+	
+	<!-- 개별 상품 정보 수정 -->
+	<update id="updateProduct" parameterType="com.javateam.project.domain.ProductVO">
+		UPDATE product SET 
+				name=#{name},
+				kind=#{kind}, 
+				price1=#{price1}, 
+				price2=#{price2}, 
+				price3=#{price3}, 
+				content=#{content}, 
+				image=#{image}, 
+				thumb_image=#{thumbImage},
+				useyn=#{useyn}, 
+				bestyn=#{bestyn},
+				indate=sysdate
+		WHERE pseq=#{pseq}
+	</update>
+	
+	<!-- 전체 상품 조회 (페이징 적용)  -->
+	<select id="getProductsByPaging" 
+			parameterType="hashmap" 
+			resultType="com.javateam.project.domain.ProductVO">
+		SELECT *  
+		FROM (SELECT ROWNUM,  
+		             m.*,  
+		             FLOOR((ROWNUM - 1) / #{limit} + 1) page  
+		      FROM (
+		             SELECT * FROM product
+		             ORDER BY pseq ASC
+		           ) m  
+		      )  
+		WHERE page = #{page}
+	</select>
+	
+	<!-- 총 상품 수 -->
+	<select id="getTotalProductsCount" resultType="int">
+		SELECT count(*) FROM product
+	</select>
+	
+	<!-- 개별 상품 상태(사용/베스트 상품 여부) 수정 
+	     ex) 관리자 모드에서 사용/베스트 상품 여부 수정 -->
+	<update id="updateFldByPseq" parameterType="hashmap">
+		UPDATE product SET ${fld}=#{fldVal} WHERE pseq=#{pseq}
+	</update>
+	
+	<!-- 상품 검색 -->
+	<select id="searchProductsByPaging" 
+			parameterType="com.javateam.project.domain.SearchProductVO"
+			resultType="com.javateam.project.domain.ProductVO">
+		SELECT *  
+		FROM (SELECT ROWNUM,  
+		             m.*,  
+		             FLOOR((ROWNUM - 1) / #{limit} + 1) page  
+		      FROM (
+		             SELECT * FROM product 
+		             
+		             <choose>
+			             
+			             <!-- <if test="searchFld == null and searchWord != null"> -->
+						 <when test="searchFld == 'all' and searchWord != null">
+							 WHERE name like '%${searchWord}%'
+						 </when>
+						             
+				         <when test="searchFld != 'all' and searchFld != null and searchWord != null">
+				             WHERE ${searchFld} = #{searchFldVal} 
+				             AND name like '%${searchWord}%' 
+			             </when>
+			             
+						 <when test="searchFld != null and searchWord == null">
+						 	WHERE ${searchFld} = #{searchFldVal}
+						 </when>
+						 
+					 </choose>
+					 
+					 ORDER BY pseq ASC
+		           ) m  
+		      )  
+		WHERE page = #{page}
+	</select>
+	
+	<!-- 검색 (페이징) 총 상품수 -->
+	<select id="getCountSearchProductsByPaging" 
+			parameterType="com.javateam.project.domain.SearchProductVO"
+			resultType="int">
+		SELECT count(*)	FROM product 
+		
+		<choose>
+		
+			 <!-- <if test="searchFld == null and searchWord != null"> -->
+			 <when test="searchFld == 'all' and searchWord != null">
+				 WHERE name like '%${searchWord}%'
+			 </when>
+			             
+	         <when test="searchFld != 'all' and searchFld != null and searchWord != null">
+	             WHERE ${searchFld} = #{searchFldVal} 
+	             AND name like '%${searchWord}%' 
+             </when>
+             
+			 <when test="searchFld != null and searchWord == null">
+			 	WHERE ${searchFld} = #{searchFldVal}
+			 </when>
+			 
+		</choose>
+			
+		ORDER BY pseq ASC
+	</select>
+	
+</mapper>

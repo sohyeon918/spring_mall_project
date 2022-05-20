@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javateam.project.mapper.Order">
+
+	<!-- 최근 주문 내역의 기본키(최근 주문 번호) -->
+	<select id="getMaxOseq" resultType="int">
+		SELECT NVL(max(oseq), 0) FROM orders
+	</select>
+	
+	<!-- 주문 내역 추가 -->
+	<insert id="insertOrder" parameterType="String">	
+		INSERT INTO orders(oseq, id) 
+		VALUES (orders_seq.nextval, #{id})
+	</insert>	
+
+	<!-- 주문 상세 내역 추가 -->
+	<insert id="insertOrderDetail" parameterType="hashmap">	
+		INSERT INTO order_detail(odseq, oseq, pseq, quantity) 
+		VALUES(order_detail_seq.nextval, 
+			  #{maxOseq}, #{cartVO.pseq}, #{cartVO.quantity})
+	</insert>
+	
+	<!-- 주문 현황 조회 -->
+	<select id="listOrderById" parameterType="hashmap" 
+			resultType="com.javateam.project.domain.OrderVO">
+		SELECT * FROM order_view 
+		WHERE id=#{id}
+		and result like '%'||${result}||'%' 
+		and oseq=#{oseq}
+	</select>
+	
+	<!-- 사용자 개별 진행중인 주문 조회 -->
+	<select id="selectSeqOrderIng" parameterType="String" 
+			resultType="int">
+		SELECT DISTINCT oseq FROM order_view 
+		WHERE id=#{id} AND result='1' 
+		ORDER BY oseq desc
+	</select>
+
+	<!-- 관리자 : 주문 현황 조회 -->
+	<select id="listOrder" parameterType="String" 
+			resultType="com.javateam.project.domain.OrderVO">
+		SELECT * FROM order_view 
+		WHERE mname LIKE '%'|| #{key} ||'%'
+		ORDER BY result, oseq DESC
+	</select>
+	
+	<!-- 관리자 : 주문 처리 상태 수정(갱신) -->
+	<update id="updateOrderResult" parameterType="int">
+		UPDATE order_detail SET result='2' 
+		WHERE odseq=#{odseq}
+	</update>
+	
+</mapper>

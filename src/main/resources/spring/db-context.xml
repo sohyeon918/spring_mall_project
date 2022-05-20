@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- Transaction Manager : @Transactional-->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
+	<bean id="txManager" 
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceDBCP" />
+		<property name="rollbackOnCommitFailure" value="true" />
+	</bean>
+	
+	<!-- Transaction Template -->
+	<bean id="txTemplate" 
+			class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="txManager" />	
+	</bean>
+	
+	<!-- HikariCP -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="project" />
+		<property name="password" value="project" /> 
+    </bean>
+	
+	<!-- HikariCP Configuration -->
+   	<bean id="dataSourceDBCP" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg ref="hikariConfig"/>
+    </bean>
+    
+    <bean id="mybatisConfig" class="org.apache.ibatis.session.Configuration">
+		<property name="mapUnderscoreToCamelCase" value="true" />
+	</bean>
+				
+	<bean id="sqlSessionFactoryBeanDBCP" 
+		  class="org.mybatis.spring.SqlSessionFactoryBean" 
+		  p:dataSource-ref="dataSourceDBCP"
+		  p:mapperLocations="classpath*:com/javateam/project/mapper/*.xml"
+		  p:configuration-ref="mybatisConfig" 
+		  p:typeAliasesPackage="com.javateam.project.domain" />
+	
+	<bean id="sqlSession" 
+		  class="org.mybatis.spring.SqlSessionTemplate" 
+		  c:sqlSessionFactory-ref="sqlSessionFactoryBeanDBCP" />
+				
+	<!-- <context:component-scan base-package="com.javateam.project" />		 -->
+	
+	<context:component-scan base-package="com.javateam.project">
+		<!-- non-web : db-context -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		
+		<!-- web : servlet-context -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+	</context:component-scan>
+	
+</beans>

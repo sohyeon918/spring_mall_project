@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javateam.project.mapper.Cart">
+
+	<!-- 카트에 상품 담기 -->
+	<insert id="insertCart" parameterType="com.javateam.project.domain.CartVO">
+		INSERT INTO cart(cseq, id, pseq, quantity)
+		VALUES (cart_seq.nextval, #{id}, #{pseq}, #{quantity})
+	</insert>
+	
+	<!-- 전체 카트 목록 조회 -->
+	<select id="listCart" parameterType="String" 
+			resultType="com.javateam.project.domain.CartVO">
+		SELECT * FROM cart_view 
+		WHERE id=#{id} 
+		ORDER BY cseq DESC
+	</select>
+	
+	<!-- 카트 수정 -->
+	<update id="updateCart" parameterType="com.javateam.project.domain.CartVO">
+		UPDATE cart SET
+		pseq = #{pseq},
+		quantity = #{quantity},
+		result = #{result},
+		indate = sysdate
+		WHERE cseq = #{cseq}
+	</update>
+	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart" parameterType="int">
+		DELETE cart WHERE cseq=#{cseq}
+	</delete>
+	
+</mapper>

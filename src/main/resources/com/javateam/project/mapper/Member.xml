@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javateam.project.mapper.Member">
+
+	<!-- 회원 정보 생성 -->
+	<insert id="insertMember" parameterType="com.javateam.project.domain.MemberVO">
+		INSERT INTO member VALUES ( #{id},
+									#{pwd},
+									#{name},
+									#{email},
+									#{phone},
+									#{zipNum},
+									#{address1},
+									#{address2},
+									#{useyn},
+									sysdate)
+	</insert>
+	
+	<!-- 회원 정보 롤(role) 생성 -->
+	<insert id="insertRole" parameterType="com.javateam.project.domain.RoleVO"> 
+		INSERT INTO member_role VALUES (role_seq.nextval, #{id}, #{role})
+	</insert>
+	
+	<!-- 개별 회원정보 존재 여부 점검 : ex) 아이디 중복 점검 -->
+	<select id="isMember" parameterType="String" resultType="int">
+		SELECT count(*) FROM member WHERE id=#{id}
+	</select>
+	
+	<!-- 이메일 존재 여부 점검 : ex) 이메일 중복 점검 -->
+	<select id="isEmail" parameterType="String" resultType="int">
+		SELECT count(*) FROM member WHERE email=#{email}
+	</select>
+	
+	<!-- 연락처(휴대폰) 존재 여부 점검 : ex) 연락처(휴대폰) 중복 점검 -->
+	<select id="isPhone" parameterType="String" resultType="int">
+		SELECT count(*) FROM member WHERE phone=#{phone}
+	</select>
+	
+	<!-- 회원 아이디/패쓰워드 일치 여부 점검 : ex) 로그인 -->
+	<select id="isMemberByIdPwd" resultType="int" parameterType="com.javateam.project.domain.MemberVO">
+		SELECT count(*) FROM member WHERE id=#{id} AND pwd=#{pwd} 
+	</select>
+	
+	<!-- 개별 회원 정보 조회 -->
+	<select id="getMember" parameterType="String" resultType="com.javateam.project.domain.MemberVO">
+		SELECT * FROM member WHERE id=#{id}
+	</select>
+	
+	<!-- 개별 회원 정보 갱신(수정) -->
+	<update id="updateMember" parameterType="com.javateam.project.domain.MemberVO">
+		UPDATE  member SET
+				pwd=#{pwd},
+				email=#{email},
+				phone=#{phone},
+				zip_num=#{zipNum},
+				address1=#{address1},
+				address2=#{address2},
+				useyn=#{useyn}
+		WHERE id=#{id}
+	</update>
+	
+	<!-- 이메일 존재 여부 점검 : ex) 이메일 중복 점검(회원 정보 수정) -->
+	<select id="isEmailOnUpdate" parameterType="hashmap" resultType="int">
+		SELECT count(*) FROM (
+			SELECT email FROM member 
+			WHERE id != #{id}
+		) 
+		WHERE email=#{email}
+	</select>
+	
+	<!-- 연락처 존재 여부 점검 : ex) 연락처 중복 점검(회원 정보 수정) -->
+	<select id="isPhoneOnUpdate" parameterType="hashmap" resultType="int">
+		SELECT count(*) FROM (
+			SELECT phone FROM member 
+			WHERE id != #{id}
+		) 
+		WHERE phone=#{phone}
+	</select>
+	
+	<!-- 회원 탈퇴 처리(useyn 비활성화(n)) -->
+	<update id="inactiveMember" parameterType="String">
+		UPDATE member SET useyn='n' WHERE id=#{id}
+	</update>
+	
+	<!-- 회원 탈퇴 처리(role=guest) -->
+	<update id="inactiveRole" parameterType="String">
+		UPDATE member_role SET role='guest' WHERE id=#{id}
+	</update>
+	
+	<!-- 회원 활성화 여부 점검(활동/탈퇴 회원 점검) -->
+	<select id="isActiveMember" parameterType="String" resultType="String">
+		SELECT useyn FROM member WHERE id=#{id}
+	</select>
+	
+	<!-- 회원 활성/비활성(탈퇴) 갱신 ex) 탈퇴 회원 갱신 처리(useyn 비/활성화(n/y)) -->
+	<update id="activeMember" parameterType="hashmap">
+		UPDATE member SET useyn=#{useyn} WHERE id=#{id}
+	</update>
+	
+	<!-- 회원 롤(role) 갱신(조정) : ex) 탈퇴 회원 갱신 처리(role=user), 관리자 변경(role=admin) -->
+	<update id="activeRole" parameterType="hashmap">
+		UPDATE member_role SET role=#{role} WHERE id=#{id}
+	</update>
+	
+	<!-- (필수 항목으로) 회원 정보 유무 조회 ex) 탈퇴한 회원 여부 점검 -->
+	<select id="isMemberByRequired" parameterType="com.javateam.project.domain.MemberVO" resultType="int">
+		SELECT count(*) FROM member
+		WHERE id=#{id} 
+		  AND pwd=#{pwd}
+		  AND email=#{email}
+		  AND phone=#{phone}
+	</select>
+	
+	<!-- 개별 회원 롤(role) 정보 조회 -->
+	<select id="getRole" parameterType="String" resultType="String">
+		SELECT role FROM member_role WHERE id=#{id}
+	</select>
+	
+	<!-- 전체 회원 조회 (페이징 적용) -->
+	<!-- 
+	<select id="getMembersByPaging" parameterType="hashmap" 
+			resultType="com.javateam.project.domain.MemberVO">
+		SELECT *  
+		FROM (SELECT ROWNUM,  
+		             m.*,  
+		             FLOOR((ROWNUM - 1) / #{limit} + 1) page  
+		      FROM (
+		             SELECT * FROM member  
+		             ORDER BY id ASC
+		           ) m  
+		      )  
+		WHERE page = #{page}
+	</select>
+	-->
+	
+	<select id="getMembersByPaging" parameterType="hashmap" 
+			resultType="com.javateam.project.domain.MemberRoleVO">
+		SELECT *  
+		FROM (SELECT ROWNUM,  
+		             m.*,  
+		             FLOOR((ROWNUM - 1) / #{limit} + 1) page  
+		      FROM (
+		             SELECT m.id, m.pwd, m.name, m.email, m.phone, 
+					        m.zip_num, m.address1, m.address2, m.useyn, m.indate, r.role
+					 FROM member m, member_role r 
+					 WHERE m.id = r.id
+					 ORDER BY id ASC
+		           ) m  
+		      )  
+		WHERE page = #{page}
+	</select>
+	
+	<!-- 총 회원 수 -->
+	<select id="getTotalMembersCount" resultType="int">
+		SELECT count(*) FROM member
+	</select>
+	
+	<!-- 검색 (페이징) ex)
+		 AND m.id = 'ezen_1002'
+		 AND address1 like '%화곡동%'
+		 AND address2 like '%심당빌딩 404호%'
+	-->
+	<select id="searchMembersByPaging" 
+			parameterType="com.javateam.project.domain.SearchVO" 
+			resultType="com.javateam.project.domain.MemberRoleVO">
+		SELECT *  
+		FROM (SELECT ROWNUM,  
+		             m.*,  
+		             FLOOR((ROWNUM - 1) / #{limit} + 1) page  
+		      FROM (
+		             SELECT m.id, m.pwd, m.name, m.email, m.phone, 
+					        m.zip_num, m.address1, m.address2, m.useyn, m.indate, r.role
+					 FROM member m, member_role r 
+					 WHERE m.id = r.id
+					 AND ${searchFld} ${isLike} #{searchWord}
+					 ORDER BY m.id ASC
+		           ) m  
+		      )  
+		WHERE page = #{page}
+	</select>	
+	
+	
+	<!-- 검색 (페이징) 총 인원수 -->
+	<select id="getCountSearchMembersByPaging" 
+			parameterType="com.javateam.project.domain.SearchVO" 
+			resultType="int">
+		SELECT count(*)
+		FROM member m, member_role r 
+		WHERE m.id = r.id
+		AND ${searchFld} ${isLike} #{searchWord}
+		ORDER BY m.id ASC
+	</select>	
+	
+	<!-- 관리자 모드 : 개별 회원 정보 수정 ex) 이메일/연락처/우편번호/기본주소/상세주소 -->
+	<update id="updateMemberByAdmin" parameterType="hashmap">
+		UPDATE member SET ${fld} = #{val} WHERE id= #{id}
+	</update>
+	
+</mapper>
